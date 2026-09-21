@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/plans")
 @SecurityRequirement(name = "bearerAuth")
-/** Provides authenticated CRUD endpoints for subscription plans. */
+/**
+ * Provides the API endpoints for viewing and managing subscription plans.
+ */
 public class SubscriptionPlanController {
 
     private final SubscriptionPlanRepository repository;
@@ -20,6 +22,9 @@ public class SubscriptionPlanController {
     }
 
     @GetMapping
+    /**
+     * Returns a page of plans, optionally filtered by name.
+     */
     public Page<SubscriptionPlan> list(
             @RequestParam(defaultValue = "") String name,
             @RequestParam(defaultValue = "0") int page,
@@ -33,6 +38,9 @@ public class SubscriptionPlanController {
     }
 
     @GetMapping("/{id}")
+    /**
+     * Returns one plan by its ID.
+     */
     public SubscriptionPlan get(@PathVariable Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new PlanNotFoundException(id));
@@ -40,11 +48,17 @@ public class SubscriptionPlanController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    /**
+     * Adds a new subscription plan.
+     */
     public SubscriptionPlan create(@RequestBody SubscriptionPlan plan) {
         return repository.save(plan);
     }
 
     @PutMapping("/{id}")
+    /**
+     * Replaces the details of an existing plan.
+     */
     public SubscriptionPlan update(@PathVariable Long id, @RequestBody SubscriptionPlan input) {
         SubscriptionPlan plan = get(id);
         plan.setName(input.getName());
@@ -57,6 +71,9 @@ public class SubscriptionPlanController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Removes an existing plan.
+     */
     public void delete(@PathVariable Long id) {
         repository.delete(get(id));
     }

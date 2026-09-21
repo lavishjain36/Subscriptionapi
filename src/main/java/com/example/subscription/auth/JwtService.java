@@ -15,7 +15,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-/** Creates and validates signed JSON Web Tokens for authenticated users. */
+/**
+ * Creates login tokens and checks that tokens are genuine and still usable.
+ */
 public class JwtService {
     private final SecretKey key;
     private final long expirationMs;
@@ -26,6 +28,9 @@ public class JwtService {
         this.expirationMs = expirationMs;
     }
 
+    /**
+     * Creates a token containing the user's name and roles.
+     */
     public String generateToken(UserDetails user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", user.getAuthorities().stream().map(a -> a.getAuthority()).toList());
@@ -34,12 +39,16 @@ public class JwtService {
                 .expiration(new Date(now.getTime() + expirationMs)).signWith(key).compact();
     }
 
-    /** Reads the username encoded as the token subject. */
+    /**
+     * Gets the username stored inside a token.
+     */
     public String username(String token) {
         return claim(token, Claims::getSubject);
     }
 
-    /** Confirms that the token belongs to the user and has not expired. */
+    /**
+     * Checks that the token belongs to this user and has not expired.
+     */
     public boolean isValid(String token, UserDetails user) {
         return user.getUsername().equals(username(token)) && !isExpired(token);
     }

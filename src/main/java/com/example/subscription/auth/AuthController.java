@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-/** Exposes authentication endpoints that issue access tokens after login. */
+/**
+ * Handles login requests and gives users a token for calling protected APIs.
+ */
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -18,7 +20,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    /** Authenticates the supplied credentials and returns a JWT for API requests. */
+    /**
+     * Checks the username and password, then returns a token when they are correct.
+     */
     public TokenResponse login(@RequestBody LoginRequest request) {
         UserDetails user = (UserDetails) authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.username(), request.password()))

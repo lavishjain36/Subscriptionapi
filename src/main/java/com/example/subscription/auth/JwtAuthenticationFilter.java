@@ -15,8 +15,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Reads the token sent with a request and signs the user in for that request.
+ */
 @Component
-/** Converts a valid Bearer JWT into Spring Security authentication. */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService users;
@@ -26,6 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.users = users;
     }
 
+    /**
+     * Checks the request token before allowing the request to continue.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {

@@ -8,11 +8,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Configuration
-/** Seeds representative Indian-named plans when a new database is empty. */
+/**
+ * Adds a few example plans when the database has no plans yet.
+ */
 public class SubscriptionPlanDataInitializer {
 
     @Bean
-    /** Inserts sample records once, while preserving any existing application data. */
+    /**
+     * Runs once when the application starts and avoids adding duplicate examples.
+     */
     CommandLineRunner seedSubscriptionPlans(SubscriptionPlanRepository repository) {
         return args -> {
             if (repository.count() > 0) {
